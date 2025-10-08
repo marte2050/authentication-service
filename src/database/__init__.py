@@ -1,0 +1,1 @@
+from .base import table_registry as table_registry 
