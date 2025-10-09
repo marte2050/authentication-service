@@ -1,0 +1,1 @@
+from utils.security.contracts.criptografy import ICriptografy as ICriptografy

@@ -23,9 +23,9 @@ def create_session() -> Generator[Session, None, None]:
     )
     
     table_registry.metadata.create_all(engine)
-    session = Session(bind=engine)
-    
-    with Session(engine) as session:
-        yield session
-
-    table_registry.metadata.drop_all(engine)
+    try:
+        with Session(engine) as session:
+            yield session
+    finally:
+        table_registry.metadata.drop_all(engine)
+        engine.dispose()

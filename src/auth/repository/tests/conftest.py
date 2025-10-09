@@ -6,8 +6,7 @@ from auth.repository import UserRepository, GroupRepository, PermissionRepositor
 
 @pytest.fixture
 def session():
-    _session = create_session()
-    return _session.__next__()
+    yield from create_session()
 
 @pytest.fixture
 def user_repository(session) -> UserRepository:

@@ -1,0 +1,1 @@
+from auth.service.contracts.user import IUserService as IUserService

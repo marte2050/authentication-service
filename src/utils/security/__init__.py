@@ -1,0 +1,1 @@
+from utils.security.criptografy import Criptografy as Criptografy

@@ -23,29 +23,29 @@ class IUserRepository(ABC):
         ...
 
     @abstractmethod
-    def get_by_id(self, db: Session, user_id: int) -> User:
+    def get_by_id(self, user_id: int) -> User:
         ...
 
     @abstractmethod
-    def get_by_username(self, db: Session, username: str) -> User:
+    def get_by_username(self, username: str) -> User:
         ...
 
     @abstractmethod
-    def get_by_email(self, db: Session, email: str) -> User:
+    def get_by_email(self, email: str) -> User:
         ...
 
     @abstractmethod
-    def create(self, db: Session, user: User) -> User:
+    def create(self, user: User) -> User:
         ...
 
     @abstractmethod
-    def update(self, db: Session, user: User) -> User:
+    def update(self, user: User) -> User:
         ...
 
     @abstractmethod
-    def delete(self, db: Session, user: User) -> None:
+    def delete(self, user: User) -> None:
         ...
 
     @abstractmethod
-    def add_group(self, db: Session, user: User, group_id: int) -> None:
+    def add_group(self, user: User, group_id: int) -> None:
         ...
