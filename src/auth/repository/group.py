@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from auth.model import User, Group
+from auth.model import User, Group, Permission
 from auth.repository.contracts import IGroupRepository
 
 
@@ -38,3 +38,9 @@ class GroupRepository(IGroupRepository):
             if user:
                 group.users.append(user)
                 self.session.commit()
+
+    def add_permission(self, group: Group, permission_id: int) -> None:
+        stmt = select(Permission).where(Permission.id == permission_id)
+        permission = self.session.execute(stmt).scalar_one_or_none()
+        group.permissions.append(permission)
+        self.session.commit()

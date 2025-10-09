@@ -45,3 +45,10 @@ def test_add_user_to_group(session, create_user, create_group, group_repository)
     group_repository.add_user(record, 1)
     record_with_user = session.execute(stmt).scalar_one_or_none()
     assert len(record_with_user.users) == 1
+
+def test_add_permission_to_group(session, create_group, create_permission, group_repository):
+    stmt = select(Group).where(Group.id == 1)
+    record = session.execute(stmt).scalar_one_or_none()
+    group_repository.add_permission(record, 1)
+    record_with_permission = session.execute(stmt).scalar_one_or_none()
+    assert len(record_with_permission.permissions) == 1

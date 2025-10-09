@@ -6,7 +6,6 @@ from utils.security.contracts import ICriptografy
 
 
 class IUserService(ABC):
-
     @abstractmethod
     def __init__(
         self, 

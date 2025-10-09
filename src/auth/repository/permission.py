@@ -21,10 +21,11 @@ class PermissionRepository(IPermissionRepository):
         self.session.refresh(permission)
         return permission
 
-    def update(self, permission: Permission) -> None:
+    def update(self, permission: Permission) -> Permission:
         self.session.merge(permission)
         self.session.commit()
         self.session.refresh(permission)
+        return permission
 
     def delete(self, permission: Permission) -> None:
         self.session.delete(permission)

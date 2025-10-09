@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
-from auth.repository.contracts import IGroupRepository
+from auth.repository.contracts import IGroupRepository, IPermissionRepository
 
 
 class IGroupService(ABC):
@@ -8,7 +8,8 @@ class IGroupService(ABC):
     def __init__(
         self, 
         session: Session, 
-        group_repository: IGroupRepository
+        group_repository: IGroupRepository,
+        permission_repository: IPermissionRepository
     ) -> None:
         ...
 

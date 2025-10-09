@@ -34,7 +34,7 @@ class IPermissionRepository(ABC):
         ...
 
     @abstractmethod
-    def update(self, permission: Permission) -> None:
+    def update(self, permission: Permission) -> Permission:
         ...
 
     @abstractmethod

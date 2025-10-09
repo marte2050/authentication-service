@@ -39,3 +39,15 @@ def test_delete_group(session, group_service, create_group):
     id = 1
     result = group_service.delete_group(id)
     assert result is True
+
+def test_add_permission_to_group(session, group_service, create_group, create_permission):
+    group_id = 1
+    permission_id = 1
+    result = group_service.add_permission_to_group(group_id, permission_id)
+    assert result is not None
+
+def test_add_user_to_group(session, group_service, create_group, create_user):
+    group_id = 1
+    user_id = 1
+    result = group_service.add_user_to_group(group_id, user_id)
+    assert result is not None

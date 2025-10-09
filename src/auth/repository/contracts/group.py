@@ -44,3 +44,7 @@ class IGroupRepository(ABC):
     @abstractmethod
     def add_user(self, group: Group, user_id: int) -> None:
         ...
+
+    @abstractmethod
+    def add_permission(self, group: Group, permission_id: int) -> None:
+        ...
