@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-fastapi = "^0.118.1"
+fastapi = {extras = ["standard"], version = "^0.118.2"}
 sqlalchemy = "^2.0.43"
 alembic = "^1.16.5"
 pydantic-settings = "^2.11.0"
@@ -26,3 +26,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.taskipy.tasks]
 test = 'python -m pytest -s --cov=. -x -vv --cov-config=.coveragerc'
+dev = 'fastapi dev main.py --host 0.0.0.0 --port 8001'
