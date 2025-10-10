@@ -13,7 +13,6 @@ from auth.schemas import (
     UserListSchemaResponse
 )
 
-
 auth_router = APIRouter()
 
 def inject_user_service(session: Session = Depends(create_session)) -> IUserService:

@@ -43,7 +43,6 @@ def test_update_all_fields_user_expects_success(client, create_user):
             "email": "updateduser@example.com",
         }
     )
-
     assert response.status_code == 200
     assert response.json() == {
         "username": "updateduser",

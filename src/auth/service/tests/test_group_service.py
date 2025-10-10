@@ -1,3 +1,7 @@
+import pytest
+from fastapi.exceptions import HTTPException
+
+
 def test_get_group_by_id(session, group_service, create_group):
     id = 1
     group = group_service.get_group_by_id(id)
@@ -22,8 +26,11 @@ def test_create_group_existing_name(session, group_service, create_group):
         "name": "testgroup",
         "description": "Another test group"
     }
-    group = group_service.create_group(group_data)
-    assert group is None
+
+    with pytest.raises(HTTPException) as exc_info:
+        group_service.create_group(group_data)
+    
+    assert exc_info.value.detail == "Group already exists"
 
 def test_update_group(session, group_service, create_group):
     id = 1
@@ -38,7 +45,7 @@ def test_update_group(session, group_service, create_group):
 def test_delete_group(session, group_service, create_group):
     id = 1
     result = group_service.delete_group(id)
-    assert result is True
+    assert result == {"detail": "Group deleted successfully"}
 
 def test_add_permission_to_group(session, group_service, create_group, create_permission):
     group_id = 1
