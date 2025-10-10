@@ -1,3 +1,4 @@
+from fastapi.exceptions import HTTPException
 from auth.service.contracts.permission import IPermissionService
 from auth.model import Permission
 from sqlalchemy.orm import Session
@@ -16,12 +17,22 @@ class PermissionService(IPermissionService):
         self.group_repository: IGroupRepository = group_repository(session)
 
     def get_permission_by_id(self, permission_id: int):
-        return self.permission_repository.get_by_id(permission_id)
+        permission_existed = self.permission_repository.get_by_id(permission_id)
+        
+        if not permission_existed:
+            raise HTTPException(status_code=404, detail="Permission not found.")
+        
+        return permission_existed
 
     def get_permission_by_name(self, name: str):
         return self.permission_repository.get_by_name(name)
 
     def create_permission(self, permission_data: dict):
+        permission_existed = self.get_permission_by_name(permission_data["name"])
+
+        if permission_existed:
+            raise HTTPException(status_code=400, detail="Permission with this name already exists.")
+        
         permission = Permission(**permission_data)
         return self.permission_repository.create(permission)
 
@@ -40,7 +51,7 @@ class PermissionService(IPermissionService):
         permission_existed = self.get_permission_by_id(permission_id)
         
         if not permission_existed:
-            return False
+            raise HTTPException(status_code=404, detail="Permission not found.")
 
         self.permission_repository.delete(permission_existed)
-        return True
+        return {"detail": "Permission deleted successfully."}

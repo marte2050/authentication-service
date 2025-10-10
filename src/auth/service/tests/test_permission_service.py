@@ -31,4 +31,4 @@ def test_update_permission(permission_service, create_permission):
 def test_delete_permission(permission_service, create_permission):
     permission_id = 1
     result = permission_service.delete_permission(permission_id)
-    assert result is True
+    assert result == {'detail': 'Permission deleted successfully.'}

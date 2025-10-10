@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from auth.model import User, Group, Permission
-from auth.router import auth_router, auth_group_router
+from auth.router import auth_router, auth_group_router, auth_permission_router
 from database import create_session
 from utils.mocks import create_session as mock_create_session
 
@@ -13,6 +13,7 @@ def client(session):
     app.dependency_overrides[create_session] = lambda: session
     app.include_router(auth_router)
     app.include_router(auth_group_router)
+    app.include_router(auth_permission_router)
     return TestClient(app)
 
 @pytest.fixture
