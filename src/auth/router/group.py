@@ -15,7 +15,7 @@ from auth.schemas.group import (
 
 auth_group_router=APIRouter()
 
-def inject_user_service(session: Session = Depends(create_session)) -> IGroupService:
+def inject_group_service(session: Session = Depends(create_session)) -> IGroupService:
     return GroupService(
         session=session,
         group_repository=GroupRepository,
@@ -30,7 +30,7 @@ def inject_user_service(session: Session = Depends(create_session)) -> IGroupSer
 )
 def create_group(
     group_data: GroupAddSchemaRequest,
-    group_service: IGroupService = Depends(inject_user_service)
+    group_service: IGroupService = Depends(inject_group_service)
 ):
     data = group_data.model_dump()
     return group_service.create_group(data)
@@ -42,7 +42,7 @@ def create_group(
 )
 def delete_group(
     group_id: int,
-    group_service: IGroupService = Depends(inject_user_service)
+    group_service: IGroupService = Depends(inject_group_service)
 ):
     return group_service.delete_group(group_id)
 
@@ -55,7 +55,7 @@ def delete_group(
 def update_group(
     group_id: int,
     group_data: GroupUpdateSchemaRequest,
-    group_service: IGroupService = Depends(inject_user_service)
+    group_service: IGroupService = Depends(inject_group_service)
 ):
     data = group_data.model_dump()
     return group_service.update_group(group_id, data)
@@ -68,7 +68,7 @@ def update_group(
 )
 def get_group(
     group_id: int,
-    group_service: IGroupService = Depends(inject_user_service)
+    group_service: IGroupService = Depends(inject_group_service)
 ):
     return group_service.get_group_by_id(group_id)
 
@@ -80,7 +80,7 @@ def get_group(
 def add_user_to_group(
     group_id: int,
     user_id: int,
-    group_service: IGroupService = Depends(inject_user_service)
+    group_service: IGroupService = Depends(inject_group_service)
 ):
     return group_service.add_user_to_group(group_id, user_id)
 
@@ -92,6 +92,6 @@ def add_user_to_group(
 def add_permission_to_group(
     group_id: int,
     permission_id: int,
-    group_service: IGroupService = Depends(inject_user_service)
+    group_service: IGroupService = Depends(inject_group_service)
 ):
     return group_service.add_permission_to_group(group_id, permission_id)
