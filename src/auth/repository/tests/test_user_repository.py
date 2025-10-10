@@ -16,13 +16,12 @@ def test_get_by_email(create_user, user_repository):
     assert stmt is not None
 
 def test_create_user(session, user_repository):
-    new_user = User(
-        username="newuser",
-        email="user@example.com",
-        hashed_password="password"
-    )
-
-    new_user = user_repository.create(new_user)
+    data = {
+        "username": "newuser",
+        "email": "user@example.com",
+        "hashed_password": "password"
+    }
+    user_repository.create(data)
     stmt = select(User).where(User.username == "newuser")
     record = session.execute(stmt).scalar_one_or_none()
     assert record is not None

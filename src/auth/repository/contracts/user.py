@@ -35,7 +35,7 @@ class IUserRepository(ABC):
         ...
 
     @abstractmethod
-    def create(self, user: User) -> User:
+    def create(self, user: dict) -> User:
         ...
 
     @abstractmethod

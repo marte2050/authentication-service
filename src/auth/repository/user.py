@@ -19,7 +19,8 @@ class UserRepository(IUserRepository):
         stmt = select(User).where(User.email == email)
         return self.session.execute(stmt).scalar_one_or_none()
 
-    def create(self, user: User) -> User:
+    def create(self, user: dict) -> User:
+        user = User(**user)
         self.session.add(user)
         self.session.commit()
         self.session.refresh(user)

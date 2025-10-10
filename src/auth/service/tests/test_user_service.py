@@ -1,3 +1,6 @@
+import pytest
+from fastapi.exceptions import HTTPException
+
 def test_get_user_by_id(user_service,create_user):
     id = 1
     user = user_service.get_user_by_id(id)
@@ -29,9 +32,11 @@ def test_create_user_existing_username(user_service, create_user):
         "email": "testuser@example.com",
         "password": "password"
     }
-
-    user = user_service.create_user(user_data)
-    assert user is None
+    with pytest.raises(HTTPException) as exc_info:
+        user = user_service.create_user(user_data)
+    
+    value = exc_info.value.detail
+    assert value == "Username or email already in use"
 
 def test_create_user_existing_email(user_service, create_user):
     user_data = {
@@ -40,8 +45,11 @@ def test_create_user_existing_email(user_service, create_user):
         "password": "password"
     }
 
-    user = user_service.create_user(user_data)
-    assert user is None
+    with pytest.raises(HTTPException) as exc_info:
+        user = user_service.create_user(user_data)
+    
+    value = exc_info.value.detail
+    assert value == "Username or email already in use"
 
 def test_update_user(user_service, create_user):
     user_id = 1
