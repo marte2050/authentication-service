@@ -47,3 +47,7 @@ class IUserService(ABC):
     @abstractmethod
     def add_group_to_user(self, user_id: int, group_id: int) -> bool:
         ...
+
+    @abstractmethod
+    def authenticate(self, username: str, password: str) -> None | User:
+        ...

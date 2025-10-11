@@ -4,6 +4,7 @@ from auth.model import User
 from auth.service.contracts import IUserService as IUserService
 from auth.repository.contracts import IUserRepository, IGroupRepository
 from utils.security.contracts import ICriptografy
+from utils.security import Token
 
 
 class UserService(IUserService):
@@ -17,6 +18,7 @@ class UserService(IUserService):
         self.user_repository: IUserRepository = user_repository(session)
         self.group_repository: IGroupRepository = group_repository(session)
         self.criptografy: ICriptografy = criptografy()
+        self.token: Token = Token()
         
     def get_user_by_id(self, user_id: int) -> None | User:
         user = self.user_repository.get_by_id(user_id)
@@ -105,3 +107,23 @@ class UserService(IUserService):
         
         self.user_repository.add_group(user_existed, group_id)
         return { "detail": "User added to group successfully" }
+
+    def authenticate(self, username: str, password: str) -> None | User:
+        user_existed = self.user_repository.get_by_username(username)
+
+        if not user_existed:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid username or password"
+            )
+        
+        password_matched = self.criptografy.verify_password(password, user_existed.hashed_password)
+
+        if not password_matched:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid username or password"
+            )
+        
+        access_token = self.token.create_access_token({"sub": str(user_existed.email)})
+        return { "access_token": access_token, "token_type": "bearer" }

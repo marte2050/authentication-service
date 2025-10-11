@@ -1,8 +1,9 @@
 import pytest
 from fastapi import FastAPI
+from utils.security import Criptografy
 from fastapi.testclient import TestClient
 from auth.model import User, Group, Permission
-from auth.router import auth_router, auth_group_router, auth_permission_router
+from auth.router import auth_router, auth_group_router, auth_permission_router, authentication_router
 from database import create_session
 from utils.mocks import create_session as mock_create_session
 
@@ -14,6 +15,7 @@ def client(session):
     app.include_router(auth_router)
     app.include_router(auth_group_router)
     app.include_router(auth_permission_router)
+    app.include_router(authentication_router)
     return TestClient(app)
 
 @pytest.fixture
@@ -22,10 +24,12 @@ def session():
 
 @pytest.fixture
 def create_user(session) -> None:
+    criptografy = Criptografy()
+    password_hashed = criptografy.hash_password("testpassword")
     new_user = User(
         username="testuser", 
         email="testuser@example.com",
-        hashed_password="testpassword"
+        hashed_password=password_hashed
     )
     session.add(new_user)
     session.commit()
