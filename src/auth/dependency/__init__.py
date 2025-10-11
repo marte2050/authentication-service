@@ -1,3 +1,4 @@
 from auth.dependency.user import inject_user_service as inject_user_service
 from auth.dependency.permission import inject_verify_permission as inject_verify_permission
 from auth.dependency.group import inject_group_service as inject_group_service
+from auth.dependency.permission import inject_permission_service as inject_permission_service
