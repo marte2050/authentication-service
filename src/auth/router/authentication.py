@@ -17,7 +17,11 @@ def inject_user_service(session: Session = Depends(create_session)) -> IUserServ
         criptografy=Criptografy
     )
 
-@authentication_router.post("/login")
+@authentication_router.post(
+    "/login",
+    tags=["auth"],
+    summary="Authenticate user and return a token"
+    )
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(), 
     user_service: IUserService = Depends(inject_user_service)

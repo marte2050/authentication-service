@@ -43,30 +43,49 @@ def create_user_with_group(session, create_group) -> None:
         email="adminuser@example.com",
         hashed_password=password_hashed
     )
+    group = Group(name="testgroup", description="A test group")
+    session.add(group)
     session.add(new_user)
-    group = session.query(Group).filter_by(name="testgroup").first()
     permission01 = Permission(name="create:user", description="Permission to create user")
     permission02 = Permission(name="delete:user", description="Permission to delete user")
     permission03 = Permission(name="update:user", description="Permission to update user")
     permission04 = Permission(name="view:user", description="Permission to view user")
     permission05 = Permission(name="add_user_to_group:user", description="Permission to add user to group")
+    permission06 = Permission(name="create:group", description="Permission to create group")
+    permission07 = Permission(name="delete:group", description="Permission to delete group")
+    permission08 = Permission(name="update:group", description="Permission to update group")
+    permission09 = Permission(name="view:group", description="Permission to view group")
+    permission10 = Permission(name="add_permission_to_group:group", description="Permission to add permission to group")
+    permission11 = Permission(name="add_user_to_group:group", description="Permission to add user to group")
     group.permissions.append(permission01)
     group.permissions.append(permission02)
     group.permissions.append(permission03)
     group.permissions.append(permission04)
     group.permissions.append(permission05)
+    group.permissions.append(permission06)
+    group.permissions.append(permission07)
+    group.permissions.append(permission08)
+    group.permissions.append(permission09)
+    group.permissions.append(permission10)
+    group.permissions.append(permission11)
     session.add(permission01)
     session.add(permission02)
     session.add(permission03)
     session.add(permission04)
     session.add(permission05)
+    session.add(permission06)
+    session.add(permission07)
+    session.add(permission08)
+    session.add(permission09)
+    session.add(permission10)
+    session.add(permission11)
     new_user.groups.append(group)
     session.commit()
 
 @pytest.fixture
 def create_group(session) -> None:
-    new_group = Group(name="testgroup", description="A test group")
-    session.add(new_group)
+    group = Group(name="secondgroup", description="A test group")
+    session.add(group)
     session.commit()
 
 @pytest.fixture
@@ -74,6 +93,7 @@ def create_permission(session) -> None:
     new_permission = Permission(name="testpermission", description="A test permission")
     session.add(new_permission)
     session.commit()
+    return new_permission.id
 
 @pytest.fixture
 def create_token_admin(client) -> str:

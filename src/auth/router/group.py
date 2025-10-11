@@ -1,9 +1,5 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from database import create_session
 from auth.service.contracts import IGroupService
-from auth.service import GroupService
-from auth.repository import PermissionRepository, GroupRepository
 from auth.schemas.group import (
     GroupAddSchemaRequest, 
     GroupAddSchemaResponse,
@@ -11,16 +7,10 @@ from auth.schemas.group import (
     GroupUpdateSchemaResponse,
     GroupListSchemaResponse
 )
+from auth.dependency import inject_group_service, inject_verify_permission
 
 
 auth_group_router=APIRouter()
-
-def inject_group_service(session: Session = Depends(create_session)) -> IGroupService:
-    return GroupService(
-        session=session,
-        group_repository=GroupRepository,
-        permission_repository=PermissionRepository
-    )
 
 @auth_group_router.post(
     "/groups/", 
@@ -30,7 +20,8 @@ def inject_group_service(session: Session = Depends(create_session)) -> IGroupSe
 )
 def create_group(
     group_data: GroupAddSchemaRequest,
-    group_service: IGroupService = Depends(inject_group_service)
+    group_service: IGroupService = Depends(inject_group_service),
+    user = Depends(inject_verify_permission("create:group"))
 ):
     data = group_data.model_dump()
     return group_service.create_group(data)
@@ -42,7 +33,8 @@ def create_group(
 )
 def delete_group(
     group_id: int,
-    group_service: IGroupService = Depends(inject_group_service)
+    group_service: IGroupService = Depends(inject_group_service),
+    user = Depends(inject_verify_permission("delete:group"))
 ):
     return group_service.delete_group(group_id)
 
@@ -55,7 +47,8 @@ def delete_group(
 def update_group(
     group_id: int,
     group_data: GroupUpdateSchemaRequest,
-    group_service: IGroupService = Depends(inject_group_service)
+    group_service: IGroupService = Depends(inject_group_service),
+    user = Depends(inject_verify_permission("update:group"))
 ):
     data = group_data.model_dump()
     return group_service.update_group(group_id, data)
@@ -68,19 +61,21 @@ def update_group(
 )
 def get_group(
     group_id: int,
-    group_service: IGroupService = Depends(inject_group_service)
+    group_service: IGroupService = Depends(inject_group_service),
+    user = Depends(inject_verify_permission("update:group"))
 ):
     return group_service.get_group_by_id(group_id)
 
 @auth_group_router.post(
-    "/group/{group_id}/group/{user_id}",
+    "/group/{group_id}/user/{user_id}",
     tags=["auth"],
     summary="Add a user to a group"
 )
 def add_user_to_group(
     group_id: int,
     user_id: int,
-    group_service: IGroupService = Depends(inject_group_service)
+    group_service: IGroupService = Depends(inject_group_service),
+    user = Depends(inject_verify_permission("add_user_to_group:group"))
 ):
     return group_service.add_user_to_group(group_id, user_id)
 

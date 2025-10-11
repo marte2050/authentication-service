@@ -62,6 +62,9 @@ class GroupService(IGroupService):
         if not permission_existed or not group_existed:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Permission or Group not found")
         
+        if permission_existed in group_existed.permissions:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Permission already assigned to group")
+        
         self.group_repository.add_permission(group_existed, permission_id)
         return {"detail": "Permission added to group successfully"}
 
