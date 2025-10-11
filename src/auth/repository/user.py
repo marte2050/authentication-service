@@ -43,3 +43,20 @@ class UserRepository(IUserRepository):
             if group:
                 user.groups.append(group)
                 self.session.commit()
+
+    def get_all_groups(self, user: User) -> list | None:
+        return user.groups
+    
+    def get_all_permissions(self, groups: list[Group]) -> list | None:
+        permissions = []
+
+        if not groups:
+            return permissions
+
+        for group in groups:
+            permissions_group = group.permissions
+            
+            for permission in permissions_group:
+                permissions.append(permission.name)
+        
+        return permissions

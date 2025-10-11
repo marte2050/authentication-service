@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from auth.model import User
+from auth.model import User, Group
 from auth.service.contracts import IUserService as IUserService
 from auth.repository.contracts import IUserRepository, IGroupRepository
 from utils.security.contracts import ICriptografy
@@ -127,3 +127,38 @@ class UserService(IUserService):
         
         access_token = self.token.create_access_token({"sub": str(user_existed.email)})
         return { "access_token": access_token, "token_type": "bearer" }
+    
+    def get_groups(self, user: User) -> list | None:
+        groups = self.user_repository.get_all_groups(user)
+        return groups
+
+    def get_permissions(self, group: Group) -> list:
+        permissions = self.user_repository.get_all_permissions(group)
+        return permissions
+    
+    def verify_permission(self, email: str, permission_name: str) -> bool:
+        user = self.get_user_by_email(email)
+        
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found"
+            )
+        
+        groups = self.get_groups(user)
+
+        if not groups:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not authorized"
+            )
+        
+        permissions = self.get_permissions(groups)
+
+        if permission_name not in permissions:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not authorized"
+            )
+        
+        return user

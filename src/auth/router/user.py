@@ -1,10 +1,6 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from database import create_session
-from utils.security.criptografy import Criptografy
+from auth.model import User
 from auth.service.contracts import IUserService
-from auth.service.user import UserService
-from auth.repository import UserRepository, GroupRepository
 from auth.schemas import (
     UserAddSchemaResponse, 
     UserAddSchemaRequest,
@@ -12,16 +8,9 @@ from auth.schemas import (
     UserUpdateSchemaRequest,
     UserListSchemaResponse
 )
+from auth.dependency import inject_user_service, inject_verify_permission
 
 auth_router = APIRouter()
-
-def inject_user_service(session: Session = Depends(create_session)) -> IUserService:
-    return UserService(
-        session=session,
-        user_repository=UserRepository,
-        group_repository=GroupRepository,
-        criptografy=Criptografy
-    )
 
 @auth_router.post(
     "/user/",
@@ -31,12 +20,12 @@ def inject_user_service(session: Session = Depends(create_session)) -> IUserServ
 )
 async def add_user(
     data: UserAddSchemaRequest,
-    user_service: IUserService = Depends(inject_user_service)
+    user_service: IUserService = Depends(inject_user_service),
+    user: User = Depends(inject_verify_permission("create:user"))
 ):
     data_json = data.model_dump()
     record = user_service.create_user(data_json)
     return record
-
 
 @auth_router.delete(
     "/user/{user_id}",
@@ -45,7 +34,8 @@ async def add_user(
 )
 async def delete_user(
     user_id: int,
-    user_service: IUserService = Depends(inject_user_service)
+    user_service: IUserService = Depends(inject_user_service),
+    user: User = Depends(inject_verify_permission("delete:user"))
 ):
     user_service.delete_user(user_id)
     return {"detail": "User deleted successfully"}
@@ -59,7 +49,8 @@ async def delete_user(
 async def update_user(
     user_id: int,
     data: UserUpdateSchemaRequest,
-    user_service: IUserService = Depends(inject_user_service)
+    user_service: IUserService = Depends(inject_user_service),
+    user: User = Depends(inject_verify_permission("update:user"))
 ):
     data_json = data.model_dump()
     record = user_service.update_user(user_id, data_json)
@@ -73,7 +64,8 @@ async def update_user(
 )
 async def get_user(
     user_id: int,
-    user_service: IUserService = Depends(inject_user_service)
+    user_service: IUserService = Depends(inject_user_service),
+    user: User = Depends(inject_verify_permission("view:user"))
 ):
     record = user_service.get_user_by_id(user_id)
     return record
@@ -86,7 +78,8 @@ async def get_user(
 async def add_user_to_group(
     user_id: int,
     group_id: int,
-    user_service: IUserService = Depends(inject_user_service)
+    user_service: IUserService = Depends(inject_user_service),
+    user: User = Depends(inject_verify_permission("add_user_to_group:user"))
 ):
     user_service.add_group_to_user(user_id, group_id)
     return {"detail": "User added to group successfully"}

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
-from auth.model import User
+from auth.model import User, Group
 from auth.repository.contracts import IUserRepository, IGroupRepository
 from utils.security.contracts import ICriptografy
 
@@ -50,4 +50,16 @@ class IUserService(ABC):
 
     @abstractmethod
     def authenticate(self, username: str, password: str) -> None | User:
+        ...
+
+    @abstractmethod
+    def get_groups(self, user: User) -> list:
+        ...
+
+    @abstractmethod
+    def get_permissions(self, group: Group) -> list:
+        ...
+
+    @abstractmethod
+    def verify_permission(self, email: str, permission_name: str) -> bool:
         ...

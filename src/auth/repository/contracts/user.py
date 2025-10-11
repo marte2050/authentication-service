@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
-from auth.model import User
+from auth.model import User, Group
 
 
 class IUserRepository(ABC):
@@ -16,6 +16,8 @@ class IUserRepository(ABC):
         - update
         - delete
         - add_group
+        - get_all_groups
+        - get_all_permissions
     """
 
     @abstractmethod
@@ -48,4 +50,12 @@ class IUserRepository(ABC):
 
     @abstractmethod
     def add_group(self, user: User, group_id: int) -> None:
+        ...
+
+    @abstractmethod
+    def get_all_groups(self, user: User) -> list | None:
+        ...
+    
+    @abstractmethod
+    def get_all_permissions(self, groups: Group) -> list | None:
         ...

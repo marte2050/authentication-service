@@ -1,6 +1,7 @@
-def test_create_user(client):
+def test_create_user(client, create_user_with_group, create_token_admin):
     response = client.post(
-        "/user/", 
+        "/user/",
+        headers={"Authorization": f"Bearer {create_token_admin}"},
         json={
             "username": "testuser",
             "email": "testuser@example.com",
@@ -14,34 +15,49 @@ def test_create_user(client):
     assert response.status_code == 200
     assert response.json() == output_expected
 
-def test_delete_user_expects_not_found(client):
-    response = client.delete("/user/1")
+def test_create_user_without_permission_expects_forbidden(client, create_user, create_token_user_common):
+    response = client.post(
+        "/user/",
+        headers={"Authorization": f"Bearer {create_token_user_common}"},
+        json={
+            "username": "newuser",
+            "email": "newuser@example.com",
+            "password": "newpassword"
+        }
+    )
+    assert response.status_code == 403
+    assert response.json() == {"detail": "Not authorized"}
+
+def test_delete_user_expects_not_found(client, create_user_with_group, create_token_admin):
+    response = client.delete("/user/999", headers={"Authorization": f"Bearer {create_token_admin}"})
     assert response.status_code == 404
     assert response.json() == {"detail": "User not found"}
 
-def test_delete_user_expects_success(client, create_user):
-    response = client.delete("/user/1")
+def test_delete_user_expects_success(client, create_user, create_user_with_group, create_token_admin):
+    response = client.delete("/user/1", headers={"Authorization": f"Bearer {create_token_admin}"})
     assert response.status_code == 200
     assert response.json() == {"detail": "User deleted successfully"}
 
-def test_update_when_no_user_expects_not_found(client):
+def test_update_when_no_user_expects_not_found(client, create_user_with_group, create_token_admin):
     response = client.put(
-        "/user/1",
+        "/user/999",
         json={
             "username": "updateduser",
             "email": "updateduser@example.com",
-        }
+        },
+        headers={"Authorization": f"Bearer {create_token_admin}"}
     )
     assert response.status_code == 404
     assert response.json() == {"detail": "User not found"}
 
-def test_update_all_fields_user_expects_success(client, create_user):
+def test_update_all_fields_user_expects_success(client, create_user, create_user_with_group, create_token_admin):
     response = client.put(
         "/user/1",
         json={
             "username": "updateduser",
             "email": "updateduser@example.com",
-        }
+        },
+        headers={"Authorization": f"Bearer {create_token_admin}"}
     )
     assert response.status_code == 200
     assert response.json() == {
@@ -49,12 +65,13 @@ def test_update_all_fields_user_expects_success(client, create_user):
         "email": "updateduser@example.com"
     }
 
-def test_update_partial_fields_user_expects_success(client, create_user):
+def test_update_partial_fields_user_expects_success(client, create_user, create_user_with_group, create_token_admin):
     response = client.put(
         "/user/1",
         json={
             "email": "updateduser@example.com",
-        }
+        },
+        headers={"Authorization": f"Bearer {create_token_admin}"}
     )
     assert response.status_code == 200
     assert response.json() == {
@@ -62,8 +79,8 @@ def test_update_partial_fields_user_expects_success(client, create_user):
         "email": "updateduser@example.com"
     }
 
-def test_get_user_by_id_expects_success(client, create_user):
-    response = client.get("/user/1")
+def test_get_user_by_id_expects_success(client, create_user, create_user_with_group, create_token_admin):
+    response = client.get("/user/1", headers={"Authorization": f"Bearer {create_token_admin}"})
 
     assert response.status_code == 200
     assert response.json() == {
@@ -71,17 +88,17 @@ def test_get_user_by_id_expects_success(client, create_user):
         "email": "testuser@example.com"
     }
 
-def test_get_user_by_id_expects_not_found(client):
-    response = client.get("/user/1")
+def test_get_user_by_id_expects_not_found(client, create_user, create_user_with_group, create_token_admin):
+    response = client.get("/user/999", headers={"Authorization": f"Bearer {create_token_admin}"})
     assert response.status_code == 404
     assert response.json() == {"detail": "User not found"}
 
-def test_add_user_to_group_expects_success(client, create_user, create_group):
-    response = client.post("/user/1/group/1")
+def test_add_user_to_group_expects_success(client, create_user, create_user_with_group, create_token_admin):
+    response = client.post("/user/1/group/1", headers={"Authorization": f"Bearer {create_token_admin}"})
     assert response.status_code == 200
     assert response.json() == {"detail": "User added to group successfully"}
 
-def test_add_user_to_group_expects_not_found(client):
-    response = client.post("/user/1/group/1")
+def test_add_user_to_group_expects_not_found(client, create_user, create_user_with_group, create_token_admin):
+    response = client.post("/user/1/group/999", headers={"Authorization": f"Bearer {create_token_admin}"})
     assert response.status_code == 404
     assert response.json() == {"detail": "User or Group not found"}

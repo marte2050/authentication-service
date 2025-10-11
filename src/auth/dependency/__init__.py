@@ -1,0 +1,2 @@
+from auth.dependency.user import inject_user_service as inject_user_service
+from auth.dependency.permission import inject_verify_permission as inject_verify_permission
