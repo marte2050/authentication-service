@@ -1,65 +1,54 @@
 from abc import ABC, abstractmethod
+
 from sqlalchemy.orm import Session
-from auth.model import User, Group
-from auth.repository.contracts import IUserRepository, IGroupRepository
+
+from auth.model import Group, User
+from auth.repository.contracts import IGroupRepository, IUserRepository
 from utils.security.contracts import ICriptografy
 
 
 class IUserService(ABC):
     @abstractmethod
     def __init__(
-        self, 
-        session: Session, 
-        user_repository: IUserRepository, 
-        group_repository: IGroupRepository, 
-        criptografy: ICriptografy
-    ) -> None:
-        ...
+        self,
+        session: Session,
+        user_repository: IUserRepository,
+        group_repository: IGroupRepository,
+        criptografy: ICriptografy,
+    ) -> None: ...
 
     @abstractmethod
-    def get_user_by_id(self, user_id: int) -> None | User:
-        ...
+    def get_user_by_id(self, user_id: int) -> None | User: ...
 
     @abstractmethod
-    def get_user_by_username(self, username: str) -> None | User:
-        ...
+    def get_user_by_username(self, username: str) -> None | User: ...
 
     @abstractmethod
-    def get_user_by_email(self, email: str) -> None | User:
-        ...
+    def get_user_by_email(self, email: str) -> None | User: ...
 
     @abstractmethod
-    def create_user(self, user_data: dict)-> None | User:
-        ...
+    def create_user(self, user_data: dict) -> None | User: ...
 
     @abstractmethod
-    def update_user(self, user_id: int, user_data: dict) -> None | User:
-        ...
+    def update_user(self, user_id: int, user_data: dict) -> None | User: ...
 
     @abstractmethod
-    def delete_user(self, user_id: int) -> bool:
-        ...
+    def delete_user(self, user_id: int) -> bool: ...
 
     @abstractmethod
-    def change_password(self, user_id: int, new_password: str) -> bool:
-        ...
+    def change_password(self, user_id: int, new_password: str) -> bool: ...
 
     @abstractmethod
-    def add_group_to_user(self, user_id: int, group_id: int) -> bool:
-        ...
+    def add_group_to_user(self, user_id: int, group_id: int) -> bool: ...
 
     @abstractmethod
-    def authenticate(self, username: str, password: str) -> None | User:
-        ...
+    def authenticate(self, username: str, password: str) -> None | User: ...
 
     @abstractmethod
-    def get_groups(self, user: User) -> list:
-        ...
+    def get_groups(self, user: User) -> list: ...
 
     @abstractmethod
-    def get_permissions(self, group: Group) -> list:
-        ...
+    def get_permissions(self, group: Group) -> list: ...
 
     @abstractmethod
-    def verify_permission(self, email: str, permission_name: str) -> bool:
-        ...
+    def verify_permission(self, email: str, permission_name: str) -> bool: ...

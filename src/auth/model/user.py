@@ -1,12 +1,12 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from database import table_registry
 
 
 @table_registry.mapped_as_dataclass
 class User:
-    """
-    User model for the application.
+    """User model for the application.
     Represents a user in the system with authentication details.
 
     Attributes:
@@ -31,7 +31,6 @@ class User:
         >>> session.add(new_user)
         >>> session.commit()
     """
-
 
     __tablename__ = "user"
     id: Mapped[int] = mapped_column(init=False, primary_key=True, autoincrement=True)

@@ -1,17 +1,18 @@
-from sqlalchemy.orm import Session
-from fastapi.exceptions import HTTPException
 from fastapi import status
-from auth.service.contracts import IGroupService as IGroupService
+from fastapi.exceptions import HTTPException
+from sqlalchemy.orm import Session
+
 from auth.model import Group
 from auth.repository.contracts import IGroupRepository, IPermissionRepository
+from auth.service.contracts import IGroupService as IGroupService
 
 
 class GroupService(IGroupService):
     def __init__(
-        self, 
-        session: Session, 
+        self,
+        session: Session,
         group_repository: IGroupRepository,
-        permission_repository: IPermissionRepository
+        permission_repository: IPermissionRepository,
     ) -> None:
         self.group_repository: IGroupRepository = group_repository(session)
         self.permission_repository: IPermissionRepository = permission_repository(session)
@@ -21,7 +22,7 @@ class GroupService(IGroupService):
 
         if not user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Group not found")
-        
+
         return user
 
     def get_group_by_name(self, name: str):
@@ -32,7 +33,7 @@ class GroupService(IGroupService):
 
         if group_existed:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Group already exists")
-        
+
         group = Group(**group_data)
         return self.group_repository.create(group)
 
@@ -61,10 +62,10 @@ class GroupService(IGroupService):
 
         if not permission_existed or not group_existed:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Permission or Group not found")
-        
+
         if permission_existed in group_existed.permissions:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Permission already assigned to group")
-        
+
         self.group_repository.add_permission(group_existed, permission_id)
         return {"detail": "Permission added to group successfully"}
 
@@ -74,6 +75,6 @@ class GroupService(IGroupService):
 
         if not user_existed or not group_existed:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User or Group not found")
-        
+
         self.group_repository.add_user(group_existed, user_id)
         return {"detail": "User added to group successfully"}

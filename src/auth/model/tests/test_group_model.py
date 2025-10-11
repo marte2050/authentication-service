@@ -1,6 +1,7 @@
 import pytest
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
+
 from auth.model import Group
 
 
@@ -9,7 +10,7 @@ def test_create_group(session):
         "name": "testgroup",
         "description": "A test group",
     }
-    
+
     new_group = Group(**data)
     session.add(new_group)
     session.commit()

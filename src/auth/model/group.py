@@ -1,12 +1,12 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from database import table_registry
 
 
 @table_registry.mapped_as_dataclass
 class Group:
-    """
-    Group model for the application.
+    """Group model for the application.
     Represents a group in the system with associated details.
 
     Attributes:

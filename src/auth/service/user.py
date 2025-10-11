@@ -1,34 +1,35 @@
-from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from auth.model import User, Group
+from sqlalchemy.orm import Session
+
+from auth.model import Group, User
+from auth.repository.contracts import IGroupRepository, IUserRepository
 from auth.service.contracts import IUserService as IUserService
-from auth.repository.contracts import IUserRepository, IGroupRepository
-from utils.security.contracts import ICriptografy
 from utils.security import Token
+from utils.security.contracts import ICriptografy
 
 
 class UserService(IUserService):
     def __init__(
-        self, 
-        session: Session, 
-        user_repository: IUserRepository, 
-        group_repository: IGroupRepository, 
-        criptografy: ICriptografy
+        self,
+        session: Session,
+        user_repository: IUserRepository,
+        group_repository: IGroupRepository,
+        criptografy: ICriptografy,
     ) -> None:
         self.user_repository: IUserRepository = user_repository(session)
         self.group_repository: IGroupRepository = group_repository(session)
         self.criptografy: ICriptografy = criptografy()
         self.token: Token = Token()
-        
+
     def get_user_by_id(self, user_id: int) -> None | User:
         user = self.user_repository.get_by_id(user_id)
 
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                detail="User not found",
             )
-        
+
         return user
 
     def get_user_by_username(self, username: str) -> None | User:
@@ -44,15 +45,15 @@ class UserService(IUserService):
         if username_exists or email_exists:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="Username or email already in use"
+                detail="Username or email already in use",
             )
-        
+
         password_hashed = self.criptografy.hash_password(user_data["password"])
 
         data = {
             "username": user_data["username"],
             "email": user_data["email"],
-            "hashed_password": password_hashed
+            "hashed_password": password_hashed,
         }
 
         return self.user_repository.create(data)
@@ -65,7 +66,7 @@ class UserService(IUserService):
         if not user_existed or email_already_used or username_already_used:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                detail="User not found",
             )
 
         user_existed.email = user_data.get("email") or user_existed.email
@@ -78,9 +79,9 @@ class UserService(IUserService):
         if not user_existed:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                detail="User not found",
             )
-        
+
         self.user_repository.delete(user_existed)
         return True
 
@@ -102,11 +103,11 @@ class UserService(IUserService):
         if not user_existed or not group_existed:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User or Group not found"
+                detail="User or Group not found",
             )
-        
+
         self.user_repository.add_group(user_existed, group_id)
-        return { "detail": "User added to group successfully" }
+        return {"detail": "User added to group successfully"}
 
     def authenticate(self, username: str, password: str) -> None | User:
         user_existed = self.user_repository.get_by_username(username)
@@ -114,20 +115,20 @@ class UserService(IUserService):
         if not user_existed:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid username or password"
+                detail="Invalid username or password",
             )
-        
+
         password_matched = self.criptografy.verify_password(password, user_existed.hashed_password)
 
         if not password_matched:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid username or password"
+                detail="Invalid username or password",
             )
-        
+
         access_token = self.token.create_access_token({"sub": str(user_existed.email)})
-        return { "access_token": access_token, "token_type": "bearer" }
-    
+        return {"access_token": access_token, "token_type": "bearer"}
+
     def get_groups(self, user: User) -> list | None:
         groups = self.user_repository.get_all_groups(user)
         return groups
@@ -135,30 +136,30 @@ class UserService(IUserService):
     def get_permissions(self, group: Group) -> list:
         permissions = self.user_repository.get_all_permissions(group)
         return permissions
-    
+
     def verify_permission(self, email: str, permission_name: str) -> bool:
         user = self.get_user_by_email(email)
-        
+
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                detail="User not found",
             )
-        
+
         groups = self.get_groups(user)
 
         if not groups:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Not authorized"
+                detail="Not authorized",
             )
-        
+
         permissions = self.get_permissions(groups)
 
         if permission_name not in permissions:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Not authorized"
+                detail="Not authorized",
             )
-        
+
         return user

@@ -1,11 +1,12 @@
 import pytest
 from fastapi import FastAPI
-from utils.security import Criptografy
 from fastapi.testclient import TestClient
-from auth.model import User, Group, Permission
-from auth.router import auth_router, auth_group_router, auth_permission_router, authentication_router
+
+from auth.model import Group, Permission, User
+from auth.router import auth_group_router, auth_permission_router, auth_router, authentication_router
 from database import create_session
 from utils.mocks import create_session as mock_create_session
+from utils.security import Criptografy
 
 
 @pytest.fixture
@@ -18,30 +19,33 @@ def client(session):
     app.include_router(authentication_router)
     return TestClient(app)
 
+
 @pytest.fixture
 def session():
     yield from mock_create_session()
+
 
 @pytest.fixture
 def create_user(session) -> None:
     criptografy = Criptografy()
     password_hashed = criptografy.hash_password("testpassword")
     new_user = User(
-        username="testuser", 
+        username="testuser",
         email="testuser@example.com",
-        hashed_password=password_hashed
+        hashed_password=password_hashed,
     )
     session.add(new_user)
     session.commit()
+
 
 @pytest.fixture
 def create_user_with_group(session, create_group) -> None:
     criptografy = Criptografy()
     password_hashed = criptografy.hash_password("adminpassword")
     new_user = User(
-        username="adminuser", 
+        username="adminuser",
         email="adminuser@example.com",
-        hashed_password=password_hashed
+        hashed_password=password_hashed,
     )
     group = Group(name="testgroup", description="A test group")
     session.add(group)
@@ -94,11 +98,13 @@ def create_user_with_group(session, create_group) -> None:
     new_user.groups.append(group)
     session.commit()
 
+
 @pytest.fixture
 def create_group(session) -> None:
     group = Group(name="secondgroup", description="A test group")
     session.add(group)
     session.commit()
+
 
 @pytest.fixture
 def create_permission(session) -> None:
@@ -107,20 +113,22 @@ def create_permission(session) -> None:
     session.commit()
     return new_permission.id
 
+
 @pytest.fixture
 def create_token_admin(client) -> str:
     response = client.post(
         "/login",
         data={"username": "adminuser", "password": "adminpassword"},
-        headers={"Content-Type": "application/x-www-form-urlencoded"}
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
     return response.json().get("access_token")
+
 
 @pytest.fixture
 def create_token_user_common(client) -> str:
     response = client.post(
         "/login",
         data={"username": "testuser", "password": "testpassword"},
-        headers={"Content-Type": "application/x-www-form-urlencoded"}
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
     )
     return response.json().get("access_token")

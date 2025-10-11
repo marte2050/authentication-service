@@ -1,13 +1,12 @@
-from typing import Generator
-from database import table_registry
+from collections.abc import Generator
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
 
 def create_session() -> Generator[Session, None, None]:
-    """
-    Create a new SQLAlchemy session for testing purposes.
+    """Create a new SQLAlchemy session for testing purposes.
 
     This function sets up an in-memory SQLite database, creates all tables
     defined in the metadata, and provides a session for database operations.
@@ -21,7 +20,7 @@ def create_session() -> Generator[Session, None, None]:
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    
+
     try:
         with Session(engine) as session:
             yield session

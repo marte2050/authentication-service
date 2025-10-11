@@ -1,4 +1,2 @@
-from auth.schemas.permission.permission_add import (
-    PermissionAddSchemaRequest as PermissionAddSchemaRequest, 
-    PermissionAddSchemaResponse as PermissionAddSchemaResponse
-)
+from auth.schemas.permission.permission_add import PermissionAddSchemaRequest as PermissionAddSchemaRequest
+from auth.schemas.permission.permission_add import PermissionAddSchemaResponse as PermissionAddSchemaResponse

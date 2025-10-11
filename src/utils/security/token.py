@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
-from jwt import encode, decode, ExpiredSignatureError, InvalidTokenError
+
+from jwt import ExpiredSignatureError, InvalidTokenError, decode, encode
+
 from settings import Settings
 
 
@@ -12,13 +14,13 @@ class Token:
 
     def create_access_token(self, data: dict) -> dict:
         to_encode = data.copy()
-        expire = datetime.now(tz=ZoneInfo('UTC')) + timedelta(
-            minutes=self.ACCESS_TOKEN_EXPIRE_MINUTES
+        expire = datetime.now(tz=ZoneInfo("UTC")) + timedelta(
+            minutes=self.ACCESS_TOKEN_EXPIRE_MINUTES,
         )
-        to_encode.update({'exp': expire})
+        to_encode.update({"exp": expire})
         encoded_jwt = encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return encoded_jwt
-    
+
     def decode_access_token(self, token: str) -> dict:
         try:
             decoded_jwt = decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
@@ -27,4 +29,3 @@ class Token:
             raise ValueError("Token has expired")
         except InvalidTokenError:
             raise ValueError("Invalid token")
-

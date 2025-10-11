@@ -1,9 +1,9 @@
 from pwdlib import PasswordHash
 
-class Criptografy:
 
+class Criptografy:
     def __init__(self) -> None:
-        self.pwd_context = PasswordHash.recommended() 
+        self.pwd_context = PasswordHash.recommended()
 
     def hash_password(self, password: str) -> str:
         return self.pwd_context.hash(password)

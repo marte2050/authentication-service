@@ -1,7 +1,8 @@
 import pytest
-from auth.model import User, Group, Permission
-from auth.service import UserService, GroupService, PermissionService
-from auth.repository import UserRepository, GroupRepository, PermissionRepository
+
+from auth.model import Group, Permission, User
+from auth.repository import GroupRepository, PermissionRepository, UserRepository
+from auth.service import GroupService, PermissionService, UserService
 from utils.mocks import create_session
 from utils.security import Criptografy
 
@@ -10,33 +11,39 @@ from utils.security import Criptografy
 def session():
     yield from create_session()
 
+
 @pytest.fixture
 def user_service(session) -> UserService:
     return UserService(session, UserRepository, GroupRepository, Criptografy)
+
 
 @pytest.fixture
 def group_service(session) -> GroupService:
     return GroupService(session, GroupRepository, PermissionRepository)
 
+
 @pytest.fixture
 def permission_service(session) -> None:
     return PermissionService(session, PermissionRepository, GroupRepository)
 
+
 @pytest.fixture
 def create_user(session) -> None:
     new_user = User(
-        username="testuser", 
+        username="testuser",
         email="testuser@example.com",
-        hashed_password="testpassword"
+        hashed_password="testpassword",
     )
     session.add(new_user)
     session.commit()
+
 
 @pytest.fixture
 def create_group(session) -> None:
     new_group = Group(name="testgroup", description="A test group")
     session.add(new_group)
     session.commit()
+
 
 @pytest.fixture
 def create_permission(session) -> None:

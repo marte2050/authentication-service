@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from auth.model import User, Group
+
+from auth.model import Group, User
 from auth.repository.contracts import IUserRepository
 
 
@@ -46,7 +47,7 @@ class UserRepository(IUserRepository):
 
     def get_all_groups(self, user: User) -> list | None:
         return user.groups
-    
+
     def get_all_permissions(self, groups: list[Group]) -> list | None:
         permissions = []
 
@@ -55,8 +56,8 @@ class UserRepository(IUserRepository):
 
         for group in groups:
             permissions_group = group.permissions
-            
+
             for permission in permissions_group:
                 permissions.append(permission.name)
-        
+
         return permissions

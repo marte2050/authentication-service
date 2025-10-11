@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from auth.model import Permission, Group
+
+from auth.model import Group, Permission
 from auth.repository.contracts import IPermissionRepository
 
 

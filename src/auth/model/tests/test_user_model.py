@@ -1,6 +1,7 @@
 import pytest
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
+
 from auth.model.user import User
 
 
@@ -10,9 +11,9 @@ def test_create_user(session):
         "email": "testuser@example.com",
         "hashed_password": "hashedpassword",
         "is_active": True,
-        "is_superuser": False
+        "is_superuser": False,
     }
-    
+
     new_user = User(**data)
     session.add(new_user)
     session.commit()
@@ -32,7 +33,7 @@ def test_constraints_unique_username(session):
         "email": "testuser@example.com",
         "hashed_password": "hashedpassword",
         "is_active": True,
-        "is_superuser": False
+        "is_superuser": False,
     }
 
     data2 = {
@@ -40,9 +41,9 @@ def test_constraints_unique_username(session):
         "email": "other@example.com",
         "hashed_password": "hashedpassword",
         "is_active": True,
-        "is_superuser": False
+        "is_superuser": False,
     }
-    
+
     new_user1 = User(**data1)
     new_user2 = User(**data2)
 
@@ -53,13 +54,14 @@ def test_constraints_unique_username(session):
 
     assert "UNIQUE constraint failed: user.username" in str(exc_info.value)
 
+
 def test_constraints_unique_email(session):
     data1 = {
         "username": "testuser1",
         "email": "testuser@example.com",
         "hashed_password": "hashedpassword",
         "is_active": True,
-        "is_superuser": False
+        "is_superuser": False,
     }
 
     data2 = {
@@ -67,9 +69,9 @@ def test_constraints_unique_email(session):
         "email": "testuser@example.com",
         "hashed_password": "hashedpassword",
         "is_active": True,
-        "is_superuser": False
+        "is_superuser": False,
     }
-    
+
     new_user1 = User(**data1)
     new_user2 = User(**data2)
 
