@@ -1,4 +1,4 @@
-name: Lint project authentication and authorization service
+name: Lint Workflow
 on:
   push:
     branches:
@@ -17,6 +17,6 @@ jobs:
         
       - uses: ./.github/actions/setup-poetry
       
-      - name: Run tests
+      - name: Run linting
         run: poetry run task lint
         working-directory: ./src
