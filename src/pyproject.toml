@@ -3,7 +3,6 @@ name = "src"
 version = "0.1.0"
 description = ""
 authors = ["Jonathan"]
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -14,6 +13,8 @@ pydantic-settings = "^2.11.0"
 pwdlib = {extras = ["argon2"], version = "^0.2.1"}
 pyjwt = "^2.10.1"
 ruff = "^0.14.0"
+gunicorn = "^23.0.0"
+psycopg2-binary = "^2.9.11"
 
 
 [tool.poetry.group.dev.dependencies]
