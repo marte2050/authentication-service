@@ -50,51 +50,29 @@ def create_user_with_group(session, create_group) -> None:
     group = Group(name="testgroup", description="A test group")
     session.add(group)
     session.add(new_user)
-    permission01 = Permission(name="create:user", description="Permission to create user")
-    permission02 = Permission(name="delete:user", description="Permission to delete user")
-    permission03 = Permission(name="update:user", description="Permission to update user")
-    permission04 = Permission(name="view:user", description="Permission to view user")
-    permission05 = Permission(name="add_user_to_group:user", description="Permission to add user to group")
-    permission06 = Permission(name="create:group", description="Permission to create group")
-    permission07 = Permission(name="delete:group", description="Permission to delete group")
-    permission08 = Permission(name="update:group", description="Permission to update group")
-    permission09 = Permission(name="view:group", description="Permission to view group")
-    permission10 = Permission(name="add_permission_to_group:group", description="Permission to add permission to group")
-    permission11 = Permission(name="add_user_to_group:group", description="Permission to add user to group")
-    permission12 = Permission(name="create:permission", description="Permission to create permission")
-    permission13 = Permission(name="delete:permission", description="Permission to delete permission")
-    permission14 = Permission(name="view:permission", description="Permission to view permission")
-    permission15 = Permission(name="update:permission", description="Permission to update permission")
-    group.permissions.append(permission01)
-    group.permissions.append(permission02)
-    group.permissions.append(permission03)
-    group.permissions.append(permission04)
-    group.permissions.append(permission05)
-    group.permissions.append(permission06)
-    group.permissions.append(permission07)
-    group.permissions.append(permission08)
-    group.permissions.append(permission09)
-    group.permissions.append(permission10)
-    group.permissions.append(permission11)
-    group.permissions.append(permission12)
-    group.permissions.append(permission13)
-    group.permissions.append(permission14)
-    group.permissions.append(permission15)
-    session.add(permission01)
-    session.add(permission02)
-    session.add(permission03)
-    session.add(permission04)
-    session.add(permission05)
-    session.add(permission06)
-    session.add(permission07)
-    session.add(permission08)
-    session.add(permission09)
-    session.add(permission10)
-    session.add(permission11)
-    session.add(permission12)
-    session.add(permission13)
-    session.add(permission14)
-    session.add(permission15)
+
+    permissions_data = [
+        ("create:user", "Permission to create user"),
+        ("delete:user", "Permission to delete user"),
+        ("update:user", "Permission to update user"),
+        ("view:user", "Permission to view user"),
+        ("add_user_to_group:user", "Permission to add user to group"),
+        ("create:group", "Permission to create group"),
+        ("delete:group", "Permission to delete group"),
+        ("update:group", "Permission to update group"),
+        ("view:group", "Permission to view group"),
+        ("add_permission_to_group:group", "Permission to add permission to group"),
+        ("add_user_to_group:group", "Permission to add user to group"),
+        ("create:permission", "Permission to create permission"),
+        ("delete:permission", "Permission to delete permission"),
+        ("view:permission", "Permission to view permission"),
+        ("update:permission", "Permission to update permission"),
+    ]
+
+    permissions = [Permission(name=name, description=desc) for name, desc in permissions_data]
+    session.add_all(permissions)
+    group.permissions.extend(permissions)
+
     new_user.groups.append(group)
     session.commit()
 

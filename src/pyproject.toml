@@ -29,15 +29,22 @@ build-backend = "poetry.core.masonry.api"
 line-length = 120 # PEP-8
 
 [tool.ruff.lint.per-file-ignores]
-"**/tests/*" = ["PT001", "ANN201", "D103", "S101", "ANN001", "PT004", "ARG001"]
+"**/tests/*" = ["PT001", "ANN201", "D103", "S101", "ANN001", "PT004", "ARG001", "S105"]
 "**/schemas/*" = ["D101"]
 "**/settings.py" = ["D101"]
+"**/router/*" = ["ARG001", "D103"]
+"**/service/*.py" = ["D107", "D102", "D101"]
+"**/utils/security/*.py" = ["D107", "D102", "D101"]
+"**/migrations/*" = ["D415", "D103", "D102"]
+"**/repository/*.py" = ["D102", "D107", "ANN204", "D101"]
+"**/dependency/*py" = ["D103"]
+"**/conftest.py" = ["S106"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.ruff.lint]
-ignore = ["D407", "D100", "FA102", "D104", "PLC0414", "INP001", "PTH123"]
+ignore = ["D407", "D100", "FA102", "D104", "PLC0414", "INP001", "PTH123", "COM812"]
 select = ['ALL']
 extend-select = ["E501"]
 

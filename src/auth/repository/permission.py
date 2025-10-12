@@ -9,8 +9,8 @@ class PermissionRepository(IPermissionRepository):
     def __init__(self, session: Session):
         self.session = session
 
-    def get_by_id(self, id: int) -> Permission:
-        return self.session.get(Permission, id)
+    def get_by_id(self, permission_id: int) -> Permission:
+        return self.session.get(Permission, permission_id)
 
     def get_by_name(self, name: str) -> Permission:
         stmt = select(Permission).where(Permission.name == name)

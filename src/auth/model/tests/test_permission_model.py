@@ -34,10 +34,10 @@ def test_constraints_unique_permission_name(session):
 
     new_permission1 = Permission(**data1)
     new_permission2 = Permission(**data2)
+    session.add(new_permission1)
+    session.add(new_permission2)
 
     with pytest.raises(IntegrityError) as exc_info:
-        session.add(new_permission1)
-        session.add(new_permission2)
         session.commit()
 
     assert "UNIQUE constraint failed: permission.name" in str(exc_info.value)

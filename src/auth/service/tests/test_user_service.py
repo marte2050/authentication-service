@@ -3,8 +3,8 @@ from fastapi.exceptions import HTTPException
 
 
 def test_get_user_by_id(user_service, create_user):
-    id = 1
-    user = user_service.get_user_by_id(id)
+    user_id = 1
+    user = user_service.get_user_by_id(user_id)
     assert user is not None
 
 
@@ -38,7 +38,7 @@ def test_create_user_existing_username(user_service, create_user):
         "password": "password",
     }
     with pytest.raises(HTTPException) as exc_info:
-        user = user_service.create_user(user_data)
+        user_service.create_user(user_data)
 
     value = exc_info.value.detail
     assert value == "Username or email already in use"
@@ -52,7 +52,7 @@ def test_create_user_existing_email(user_service, create_user):
     }
 
     with pytest.raises(HTTPException) as exc_info:
-        user = user_service.create_user(user_data)
+        user_service.create_user(user_data)
 
     value = exc_info.value.detail
     assert value == "Username or email already in use"
@@ -72,7 +72,7 @@ def test_update_user(user_service, create_user):
 
 def test_delete_user(user_service, create_user):
     user = user_service.delete_user(1)
-    assert user is True
+    assert user == {"detail": "User deleted successfully."}
 
 
 def test_change_password(user_service, create_user):

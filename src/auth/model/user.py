@@ -6,8 +6,7 @@ from database import table_registry
 
 @table_registry.mapped_as_dataclass
 class User:
-    """User model for the application.
-    Represents a user in the system with authentication details.
+    """Represents a user in the system with authentication details.
 
     Attributes:
         id (int): Primary key, unique identifier for the user.

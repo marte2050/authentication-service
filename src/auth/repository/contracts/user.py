@@ -6,7 +6,7 @@ from auth.model import Group, User
 
 
 class IUserRepository(ABC):
-    """Interface for User repository
+    """Interface for User repository.
 
     Methods:
         - init - initialize with a database session

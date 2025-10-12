@@ -4,8 +4,8 @@ from auth.model import Permission
 
 
 def test_get_by_id(create_permission, permission_repository):
-    id = 1
-    stmt = permission_repository.get_by_id(id)
+    permission_id = 1
+    stmt = permission_repository.get_by_id(permission_id)
     assert stmt is not None
 
 
@@ -27,8 +27,8 @@ def test_create_permission(session, permission_repository):
 
 
 def test_update_permission(session, create_permission, permission_repository):
-    id = 1
-    stmt = select(Permission).where(Permission.id == id)
+    permission_id = 1
+    stmt = select(Permission).where(Permission.id == permission_id)
     record = session.execute(stmt).scalar_one_or_none()
     record.description = "An updated test permission"
     permission_repository.update(record)
@@ -37,8 +37,8 @@ def test_update_permission(session, create_permission, permission_repository):
 
 
 def test_delete_permission(session, create_permission, permission_repository):
-    id = 1
-    stmt = select(Permission).where(Permission.id == id)
+    permission_id = 1
+    stmt = select(Permission).where(Permission.id == permission_id)
     record = session.execute(stmt).scalar_one_or_none()
     permission_repository.delete(record)
     record_deleted = session.execute(stmt).scalar_one_or_none()
@@ -46,9 +46,9 @@ def test_delete_permission(session, create_permission, permission_repository):
 
 
 def test_add_permission_to_group(session, create_permission, create_group, permission_repository):
-    id = 1
+    permission_id = 1
     group_id = 1
-    stmt = select(Permission).where(Permission.id == id)
+    stmt = select(Permission).where(Permission.id == permission_id)
     record = session.execute(stmt).scalar_one_or_none()
     permission_repository.add_to_group(record, group_id)
     record = session.execute(stmt).scalar_one_or_none()

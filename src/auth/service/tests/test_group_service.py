@@ -3,8 +3,8 @@ from fastapi.exceptions import HTTPException
 
 
 def test_get_group_by_id(session, group_service, create_group):
-    id = 1
-    group = group_service.get_group_by_id(id)
+    group_id = 1
+    group = group_service.get_group_by_id(group_id)
     assert group is not None
 
 
@@ -37,19 +37,19 @@ def test_create_group_existing_name(session, group_service, create_group):
 
 
 def test_update_group(session, group_service, create_group):
-    id = 1
+    group_id = 1
     group_data = {
         "name": "updatedgroup",
         "description": "An updated test group",
     }
-    group = group_service.update_group(id, group_data)
+    group = group_service.update_group(group_id, group_data)
     assert group is not None
     assert group.name == "updatedgroup"
 
 
 def test_delete_group(session, group_service, create_group):
-    id = 1
-    result = group_service.delete_group(id)
+    group_id = 1
+    result = group_service.delete_group(group_id)
     assert result == {"detail": "Group deleted successfully"}
 
 

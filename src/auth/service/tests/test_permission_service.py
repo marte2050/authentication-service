@@ -1,6 +1,6 @@
 def test_get_permission_by_id(permission_service, create_permission):
-    id = 1
-    permission = permission_service.get_permission_by_id(id)
+    permission_id = 1
+    permission = permission_service.get_permission_by_id(permission_id)
     assert permission is not None
 
 

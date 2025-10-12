@@ -1,7 +1,9 @@
 from pwdlib import PasswordHash
 
+from utils.security.contracts import ICriptografy
 
-class Criptografy:
+
+class Criptografy(ICriptografy):
     def __init__(self) -> None:
         self.pwd_context = PasswordHash.recommended()
 

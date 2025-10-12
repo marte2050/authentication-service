@@ -7,7 +7,7 @@ from settings import Settings
 
 
 class Token:
-    def __init__(self):
+    def __init__(self) -> None:
         self.SECRET_KEY = Settings().SECRET_KEY
         self.ALGORITHM = Settings().ALGORITHM_TOKEN
         self.ACCESS_TOKEN_EXPIRE_MINUTES = Settings().ACCESS_TOKEN_EXPIRE_MINUTES
@@ -18,14 +18,14 @@ class Token:
             minutes=self.ACCESS_TOKEN_EXPIRE_MINUTES,
         )
         to_encode.update({"exp": expire})
-        encoded_jwt = encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
-        return encoded_jwt
+        return encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
 
     def decode_access_token(self, token: str) -> dict:
         try:
-            decoded_jwt = decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
-            return decoded_jwt
-        except ExpiredSignatureError:
-            raise ValueError("Token has expired")
-        except InvalidTokenError:
-            raise ValueError("Invalid token")
+            return decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
+        except ExpiredSignatureError as error:
+            msg = "Token has expired"
+            raise ValueError(msg) from error
+        except InvalidTokenError as error:
+            msg = "Invalid token"
+            raise ValueError(msg) from error

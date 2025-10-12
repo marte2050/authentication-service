@@ -55,9 +55,6 @@ class UserRepository(IUserRepository):
             return permissions
 
         for group in groups:
-            permissions_group = group.permissions
-
-            for permission in permissions_group:
-                permissions.append(permission.name)
+            permissions.extend(permission.name for permission in group.permissions)
 
         return permissions

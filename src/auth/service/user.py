@@ -21,7 +21,7 @@ class UserService(IUserService):
         self.criptografy: ICriptografy = criptografy()
         self.token: Token = Token()
 
-    def get_user_by_id(self, user_id: int) -> None | User:
+    def get_user_by_id(self, user_id: int) -> User:
         user = self.user_repository.get_by_id(user_id)
 
         if not user:
@@ -58,7 +58,7 @@ class UserService(IUserService):
 
         return self.user_repository.create(data)
 
-    def update_user(self, user_id: int, user_data: dict) -> None | User:
+    def update_user(self, user_id: int, user_data: dict) -> User:
         user_existed = self.user_repository.get_by_id(user_id)
         username_already_used = self.user_repository.get_by_username(user_data["username"])
         email_already_used = self.user_repository.get_by_email(user_data["email"])
@@ -83,7 +83,7 @@ class UserService(IUserService):
             )
 
         self.user_repository.delete(user_existed)
-        return True
+        return {"detail": "User deleted successfully."}
 
     def change_password(self, user_id: int, new_password: str) -> bool:
         user_existed = self.user_repository.get_by_id(user_id)
@@ -109,7 +109,7 @@ class UserService(IUserService):
         self.user_repository.add_group(user_existed, group_id)
         return {"detail": "User added to group successfully"}
 
-    def authenticate(self, username: str, password: str) -> None | User:
+    def authenticate(self, username: str, password: str) -> dict:
         user_existed = self.user_repository.get_by_username(username)
 
         if not user_existed:
@@ -130,14 +130,12 @@ class UserService(IUserService):
         return {"access_token": access_token, "token_type": "bearer"}
 
     def get_groups(self, user: User) -> list | None:
-        groups = self.user_repository.get_all_groups(user)
-        return groups
+        return self.user_repository.get_all_groups(user)
 
     def get_permissions(self, group: Group) -> list:
-        permissions = self.user_repository.get_all_permissions(group)
-        return permissions
+        return self.user_repository.get_all_permissions(group)
 
-    def verify_permission(self, email: str, permission_name: str) -> bool:
+    def verify_permission(self, email: str, permission_name: str) -> User:
         user = self.get_user_by_email(email)
 
         if not user:

@@ -17,7 +17,7 @@ class PermissionService(IPermissionService):
         self.permission_repository: IPermissionRepository = permission_repository(session)
         self.group_repository: IGroupRepository = group_repository(session)
 
-    def get_permission_by_id(self, permission_id: int):
+    def get_permission_by_id(self, permission_id: int) -> Permission:
         permission_existed = self.permission_repository.get_by_id(permission_id)
 
         if not permission_existed:
@@ -25,10 +25,10 @@ class PermissionService(IPermissionService):
 
         return permission_existed
 
-    def get_permission_by_name(self, name: str):
+    def get_permission_by_name(self, name: str) -> Permission | None:
         return self.permission_repository.get_by_name(name)
 
-    def create_permission(self, permission_data: dict):
+    def create_permission(self, permission_data: dict) -> Permission:
         permission_existed = self.get_permission_by_name(permission_data["name"])
 
         if permission_existed:
@@ -37,18 +37,17 @@ class PermissionService(IPermissionService):
         permission = Permission(**permission_data)
         return self.permission_repository.create(permission)
 
-    def update_permission(self, permission_id: int, permission_data: dict):
+    def update_permission(self, permission_id: int, permission_data: dict) -> Permission:
         permission_existed = self.get_permission_by_id(permission_id)
 
         if not permission_existed:
-            return False
+            raise HTTPException(status_code=404, detail="Permission not found.")
 
         permission_existed.name = permission_data.get("name", permission_existed.name)
         permission_existed.description = permission_data.get("description", permission_existed.description)
-        permission = self.permission_repository.update(permission_existed)
-        return permission
+        return self.permission_repository.update(permission_existed)
 
-    def delete_permission(self, permission_id: int):
+    def delete_permission(self, permission_id: int) -> dict:
         permission_existed = self.get_permission_by_id(permission_id)
 
         if not permission_existed:

@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -11,7 +13,7 @@ from utils.security.criptografy import Criptografy
 authentication_router = APIRouter()
 
 
-def inject_user_service(session: Session = Depends(create_session)) -> IUserService:
+def inject_user_service(session: Annotated[Session, Depends(create_session)]) -> IUserService:
     return UserService(
         session=session,
         user_repository=UserRepository,
@@ -26,7 +28,7 @@ def inject_user_service(session: Session = Depends(create_session)) -> IUserServ
     summary="Authenticate user and return a token",
 )
 async def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    user_service: IUserService = Depends(inject_user_service),
-):
+    user_service: Annotated[IUserService, Depends(inject_user_service)],
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+) -> dict:
     return user_service.authenticate(form_data.username, form_data.password)

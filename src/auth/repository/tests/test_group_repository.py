@@ -4,8 +4,8 @@ from auth.model import Group
 
 
 def test_get_by_id(create_group, group_repository):
-    id = 1
-    stmt = group_repository.get_by_id(id)
+    group_id = 1
+    stmt = group_repository.get_by_id(group_id)
     assert stmt is not None
 
 
@@ -27,8 +27,8 @@ def test_create_group(session, group_repository):
 
 
 def test_update_group(session, create_group, group_repository):
-    id = 1
-    stmt = select(Group).where(Group.id == 1)
+    group_id = 1
+    stmt = select(Group).where(Group.id == group_id)
     record = session.execute(stmt).scalar_one_or_none()
     record.description = "An updated test group"
     group_repository.update(record)
@@ -37,8 +37,8 @@ def test_update_group(session, create_group, group_repository):
 
 
 def test_delete_group(session, create_group, group_repository):
-    id = 1
-    stmt = select(Group).where(Group.id == 1)
+    group_id = 1
+    stmt = select(Group).where(Group.id == group_id)
     record = session.execute(stmt).scalar_one_or_none()
     group_repository.delete(record)
     record_deleted = session.execute(stmt).scalar_one_or_none()
@@ -46,7 +46,8 @@ def test_delete_group(session, create_group, group_repository):
 
 
 def test_add_user_to_group(session, create_user, create_group, group_repository):
-    stmt = select(Group).where(Group.id == 1)
+    group_id = 1
+    stmt = select(Group).where(Group.id == group_id)
     record = session.execute(stmt).scalar_one_or_none()
     group_repository.add_user(record, 1)
     record_with_user = session.execute(stmt).scalar_one_or_none()
@@ -54,7 +55,8 @@ def test_add_user_to_group(session, create_user, create_group, group_repository)
 
 
 def test_add_permission_to_group(session, create_group, create_permission, group_repository):
-    stmt = select(Group).where(Group.id == 1)
+    group_id = 1
+    stmt = select(Group).where(Group.id == group_id)
     record = session.execute(stmt).scalar_one_or_none()
     group_repository.add_permission(record, 1)
     record_with_permission = session.execute(stmt).scalar_one_or_none()

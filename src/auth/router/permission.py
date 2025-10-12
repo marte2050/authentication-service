@@ -1,6 +1,9 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 
 from auth.dependency import inject_permission_service, inject_verify_permission
+from auth.model import Permission, User
 from auth.schemas.permission import PermissionAddSchemaRequest, PermissionAddSchemaResponse
 from auth.service.contracts import IPermissionService
 
@@ -15,9 +18,9 @@ auth_permission_router = APIRouter()
 )
 def create_permission(
     data_permission: PermissionAddSchemaRequest,
-    permission_service: IPermissionService = Depends(inject_permission_service),
-    user=Depends(inject_verify_permission("create:permission")),
-):
+    permission_service: Annotated[IPermissionService, Depends(inject_permission_service)],
+    user: Annotated[User, Depends(inject_verify_permission("create:permission"))],
+) -> Permission:
     data = data_permission.model_dump()
     return permission_service.create_permission(data)
 
@@ -29,9 +32,9 @@ def create_permission(
 )
 def delete_permission(
     permission_id: int,
-    permission_service: IPermissionService = Depends(inject_permission_service),
-    user=Depends(inject_verify_permission("delete:permission")),
-):
+    permission_service: Annotated[IPermissionService, Depends(inject_permission_service)],
+    user: Annotated[User, Depends(inject_verify_permission("delete:permission"))],
+) -> dict:
     return permission_service.delete_permission(permission_id)
 
 
@@ -43,9 +46,9 @@ def delete_permission(
 )
 def get_permission_by_id(
     permission_id: int,
-    permission_service: IPermissionService = Depends(inject_permission_service),
-    user=Depends(inject_verify_permission("view:permission")),
-):
+    permission_service: Annotated[IPermissionService, Depends(inject_permission_service)],
+    user: Annotated[User, Depends(inject_verify_permission("view:permission"))],
+) -> Permission:
     return permission_service.get_permission_by_id(permission_id)
 
 
@@ -58,8 +61,8 @@ def get_permission_by_id(
 def update_permission(
     permission_id: int,
     data_permission: PermissionAddSchemaRequest,
-    permission_service: IPermissionService = Depends(inject_permission_service),
-    user=Depends(inject_verify_permission("update:permission")),
-):
+    permission_service: Annotated[IPermissionService, Depends(inject_permission_service)],
+    user: Annotated[User, Depends(inject_verify_permission("update:permission"))],
+) -> Permission:
     data = data_permission.model_dump()
     return permission_service.update_permission(permission_id, data)

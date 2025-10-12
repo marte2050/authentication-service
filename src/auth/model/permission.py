@@ -6,8 +6,7 @@ from database import table_registry
 
 @table_registry.mapped_as_dataclass
 class Permission:
-    """Permission model for the application.
-    Represents a permission in the system with associated details.
+    """Represents a permission in the system with associated details.
 
     Attributes:
         id (int): Primary key, unique identifier for the permission.

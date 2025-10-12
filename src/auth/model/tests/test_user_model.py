@@ -46,10 +46,10 @@ def test_constraints_unique_username(session):
 
     new_user1 = User(**data1)
     new_user2 = User(**data2)
+    session.add(new_user1)
+    session.add(new_user2)
 
     with pytest.raises(IntegrityError) as exc_info:
-        session.add(new_user1)
-        session.add(new_user2)
         session.commit()
 
     assert "UNIQUE constraint failed: user.username" in str(exc_info.value)
@@ -74,10 +74,10 @@ def test_constraints_unique_email(session):
 
     new_user1 = User(**data1)
     new_user2 = User(**data2)
+    session.add(new_user1)
+    session.add(new_user2)
 
     with pytest.raises(IntegrityError) as exc_info:
-        session.add(new_user1)
-        session.add(new_user2)
         session.commit()
 
     assert "UNIQUE constraint failed: user.email" in str(exc_info.value)

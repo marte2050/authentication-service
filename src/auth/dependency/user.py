@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -8,7 +10,7 @@ from database import create_session
 from utils.security.criptografy import Criptografy
 
 
-def inject_user_service(session: Session = Depends(create_session)) -> IUserService:
+def inject_user_service(session: Annotated[Session, Depends(create_session)]) -> IUserService:
     return UserService(
         session=session,
         user_repository=UserRepository,

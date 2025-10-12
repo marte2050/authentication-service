@@ -25,10 +25,10 @@ class GroupService(IGroupService):
 
         return user
 
-    def get_group_by_name(self, name: str):
+    def get_group_by_name(self, name: str) -> Group | None:
         return self.group_repository.get_by_name(name)
 
-    def create_group(self, group_data: dict):
+    def create_group(self, group_data: dict) -> None:
         group_existed = self.group_repository.get_by_name(group_data["name"])
 
         if group_existed:
@@ -37,7 +37,7 @@ class GroupService(IGroupService):
         group = Group(**group_data)
         return self.group_repository.create(group)
 
-    def update_group(self, group_id: int, group_data: dict):
+    def update_group(self, group_id: int, group_data: dict) -> Group:
         group_existed = self.group_repository.get_by_id(group_id)
 
         if not group_existed:
@@ -47,7 +47,7 @@ class GroupService(IGroupService):
         group_existed.description = group_data.get("description") or group_existed.description
         return self.group_repository.update(group_existed)
 
-    def delete_group(self, group_id: int):
+    def delete_group(self, group_id: int) -> dict:
         group_existed = self.group_repository.get_by_id(group_id)
 
         if not group_existed:
@@ -56,7 +56,7 @@ class GroupService(IGroupService):
         self.group_repository.delete(group_existed)
         return {"detail": "Group deleted successfully"}
 
-    def add_permission_to_group(self, group_id: int, permission_id: int):
+    def add_permission_to_group(self, group_id: int, permission_id: int) -> dict:
         permission_existed = self.permission_repository.get_by_id(permission_id)
         group_existed = self.group_repository.get_by_id(group_id)
 
@@ -69,7 +69,7 @@ class GroupService(IGroupService):
         self.group_repository.add_permission(group_existed, permission_id)
         return {"detail": "Permission added to group successfully"}
 
-    def add_user_to_group(self, group_id: int, user_id: int):
+    def add_user_to_group(self, group_id: int, user_id: int) -> dict:
         user_existed = self.group_repository.get_by_id(user_id)
         group_existed = self.group_repository.get_by_id(group_id)
 

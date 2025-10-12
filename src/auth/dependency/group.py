@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -7,7 +9,7 @@ from auth.service.contracts import IGroupService
 from database import create_session
 
 
-def inject_group_service(session: Session = Depends(create_session)) -> IGroupService:
+def inject_group_service(session: Annotated[Session, Depends(create_session)]) -> IGroupService:
     return GroupService(
         session=session,
         group_repository=GroupRepository,

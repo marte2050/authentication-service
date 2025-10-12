@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 
 from auth.dependency import inject_user_service, inject_verify_permission
@@ -22,12 +24,11 @@ auth_router = APIRouter()
 )
 async def add_user(
     data: UserAddSchemaRequest,
-    user_service: IUserService = Depends(inject_user_service),
-    user: User = Depends(inject_verify_permission("create:user")),
-):
+    user_service: Annotated[IUserService, Depends(inject_user_service)],
+    user: Annotated[User, Depends(inject_verify_permission("create:user"))],
+) -> User:
     data_json = data.model_dump()
-    record = user_service.create_user(data_json)
-    return record
+    return user_service.create_user(data_json)
 
 
 @auth_router.delete(
@@ -37,9 +38,9 @@ async def add_user(
 )
 async def delete_user(
     user_id: int,
-    user_service: IUserService = Depends(inject_user_service),
-    user: User = Depends(inject_verify_permission("delete:user")),
-):
+    user_service: Annotated[IUserService, Depends(inject_user_service)],
+    user: Annotated[User, Depends(inject_verify_permission("delete:user"))],
+) -> dict:
     user_service.delete_user(user_id)
     return {"detail": "User deleted successfully"}
 
@@ -53,12 +54,11 @@ async def delete_user(
 async def update_user(
     user_id: int,
     data: UserUpdateSchemaRequest,
-    user_service: IUserService = Depends(inject_user_service),
-    user: User = Depends(inject_verify_permission("update:user")),
-):
+    user_service: Annotated[IUserService, Depends(inject_user_service)],
+    user: Annotated[User, Depends(inject_verify_permission("update:user"))],
+) -> User:
     data_json = data.model_dump()
-    record = user_service.update_user(user_id, data_json)
-    return record
+    return user_service.update_user(user_id, data_json)
 
 
 @auth_router.get(
@@ -69,11 +69,10 @@ async def update_user(
 )
 async def get_user(
     user_id: int,
-    user_service: IUserService = Depends(inject_user_service),
-    user: User = Depends(inject_verify_permission("view:user")),
-):
-    record = user_service.get_user_by_id(user_id)
-    return record
+    user_service: Annotated[IUserService, Depends(inject_user_service)],
+    user: Annotated[User, Depends(inject_verify_permission("view:user"))],
+) -> User:
+    return user_service.get_user_by_id(user_id)
 
 
 @auth_router.post(
@@ -84,8 +83,11 @@ async def get_user(
 async def add_user_to_group(
     user_id: int,
     group_id: int,
-    user_service: IUserService = Depends(inject_user_service),
-    user: User = Depends(inject_verify_permission("add_user_to_group:user")),
-):
+    user_service: Annotated[IUserService, Depends(inject_user_service)],
+    user: Annotated[
+        User,
+        Depends(inject_verify_permission("add_user_to_group:user")),
+    ],
+) -> dict:
     user_service.add_group_to_user(user_id, group_id)
     return {"detail": "User added to group successfully"}
