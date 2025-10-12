@@ -7,7 +7,7 @@ from main import app
 
 def generate_openapi() -> None:
     """Generate OpenAPI specification and save it to src/docs/openapi.yaml."""
-    src_dir = Path(__file__).resolve().parents[2]
+    src_dir = Path(__file__).resolve().parents[3]
     output_dir = src_dir / "docs"
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "openapi.yaml"
