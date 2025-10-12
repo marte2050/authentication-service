@@ -12,40 +12,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install pipx
-        run: sudo apt-get update && sudo apt-get install -y pipx
-
-      - name: Install poetry
-        run: pipx install poetry==2.2.1
-
-      - name: Add Poetry to PATH
-        run: echo "${HOME}/.local/bin" >> $GITHUB_PATH
-
-      - name: Virtual env in project
-        run: poetry config virtualenvs.in-project true
-        working-directory: ./src
-
-      - name: Install dependencies
-        run: poetry install --no-root
-        working-directory: ./src
-
-      - name: Set environment variables
-        run: mv .env.sample.dev .env
-        working-directory: ./src
-
-      - name: Set virtual environment
-        run: echo "${HOME}/src/.venv/bin" >> $GITHUB_PATH
-
+      - uses: ./.github/actions/setup-poetry
+      
       - name: Run tests
         run: poetry run task test
         working-directory: ./src
