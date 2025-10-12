@@ -47,5 +47,5 @@ jobs:
         run: echo "${HOME}/src/.venv/bin" >> $GITHUB_PATH
 
       - name: Run tests
-        run: poetry run pytest
+        run: poetry run task test
         working-directory: ./src
