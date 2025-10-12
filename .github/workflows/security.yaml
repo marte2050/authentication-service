@@ -2,7 +2,7 @@ name: Security Workflow
 
 on:
   workflow_run:
-    workflows: ["Lint Workflow"]
+    workflows: ["Test Workflow"]
     types:
       - completed
 
@@ -23,6 +23,11 @@ jobs:
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
 
       - uses: ./.github/actions/setup-poetry
 
