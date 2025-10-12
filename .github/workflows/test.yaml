@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         
-      - uses: .github/actions/setup-poetry
+      - uses: ./github/actions/setup-poetry
       
       - name: Run tests
         run: poetry run task test
