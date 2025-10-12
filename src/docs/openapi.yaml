@@ -1,0 +1,753 @@
+openapi: 3.1.0
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  /user/:
+    post:
+      tags:
+      - auth
+      summary: Create a new user
+      operationId: add_user_user__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAddSchemaRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAddSchemaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /user/{user_id}:
+    delete:
+      tags:
+      - auth
+      summary: Delete a user by ID
+      operationId: delete_user_user__user_id__delete
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Delete User User  User Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - auth
+      summary: Update a user by ID
+      operationId: update_user_user__user_id__put
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateSchemaRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdateSchemaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - auth
+      summary: Get a user by ID
+      operationId: get_user_user__user_id__get
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListSchemaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/{user_id}/group/{group_id}:
+    post:
+      tags:
+      - auth
+      summary: Add a user to a group
+      operationId: add_user_to_group_user__user_id__group__group_id__post
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: User Id
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Group Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Add User To Group User  User Id  Group  Group Id  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /groups/:
+    post:
+      tags:
+      - auth
+      summary: Create a new group
+      operationId: create_group_groups__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupAddSchemaRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupAddSchemaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /groups/{group_id}:
+    delete:
+      tags:
+      - auth
+      summary: Delete a group by ID
+      operationId: delete_group_groups__group_id__delete
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Group Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Delete Group Groups  Group Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - auth
+      summary: Update a group by ID
+      operationId: update_group_groups__group_id__put
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Group Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupUpdateSchemaRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupUpdateSchemaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - auth
+      summary: Get a group by ID
+      operationId: get_group_groups__group_id__get
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Group Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupListSchemaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /group/{group_id}/user/{user_id}:
+    post:
+      tags:
+      - auth
+      summary: Add a user to a group
+      operationId: add_user_to_group_group__group_id__user__user_id__post
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Group Id
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Add User To Group Group  Group Id  User  User Id  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /group/{group_id}/permission/{permission_id}:
+    post:
+      tags:
+      - auth
+      summary: Add a permission to a group
+      operationId: add_permission_to_group_group__group_id__permission__permission_id__post
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Group Id
+      - name: permission_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Permission Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Add Permission To Group Group  Group Id  Permission  Permission
+                  Id  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /permissions/:
+    post:
+      tags:
+      - auth
+      summary: Create a new permission
+      operationId: create_permission_permissions__post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionAddSchemaRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionAddSchemaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /permissions/{permission_id}:
+    delete:
+      tags:
+      - auth
+      summary: Delete a permission by ID
+      operationId: delete_permission_permissions__permission_id__delete
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: permission_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Permission Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Delete Permission Permissions  Permission Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - auth
+      summary: Get a permission by ID
+      operationId: get_permission_by_id_permissions__permission_id__get
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: permission_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Permission Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionAddSchemaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - auth
+      summary: Update a permission by ID
+      operationId: update_permission_permissions__permission_id__put
+      security:
+      - OAuth2PasswordBearer: []
+      parameters:
+      - name: permission_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Permission Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionAddSchemaRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionAddSchemaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /login:
+    post:
+      tags:
+      - auth
+      summary: Authenticate user and return a token
+      operationId: login_login_post
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Body_login_login_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Login Login Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Body_login_login_post:
+      properties:
+        grant_type:
+          anyOf:
+          - type: string
+            pattern: ^password$
+          - type: 'null'
+          title: Grant Type
+        username:
+          type: string
+          title: Username
+        password:
+          type: string
+          format: password
+          title: Password
+        scope:
+          type: string
+          title: Scope
+          default: ''
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+        client_secret:
+          anyOf:
+          - type: string
+          - type: 'null'
+          format: password
+          title: Client Secret
+      type: object
+      required:
+      - username
+      - password
+      title: Body_login_login_post
+    GroupAddSchemaRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 3
+          title: Name
+        description:
+          type: string
+          maxLength: 50
+          minLength: 3
+          title: Description
+      type: object
+      required:
+      - name
+      - description
+      title: GroupAddSchemaRequest
+    GroupAddSchemaResponse:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - name
+      - description
+      title: GroupAddSchemaResponse
+    GroupListSchemaResponse:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - name
+      - description
+      title: GroupListSchemaResponse
+    GroupUpdateSchemaRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+            maxLength: 50
+            minLength: 3
+          - type: 'null'
+          title: Name
+        description:
+          anyOf:
+          - type: string
+            maxLength: 50
+            minLength: 3
+          - type: 'null'
+          title: Description
+      type: object
+      title: GroupUpdateSchemaRequest
+    GroupUpdateSchemaResponse:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - name
+      - description
+      title: GroupUpdateSchemaResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PermissionAddSchemaRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 3
+          title: Name
+        description:
+          type: string
+          maxLength: 50
+          minLength: 3
+          title: Description
+      type: object
+      required:
+      - name
+      - description
+      title: PermissionAddSchemaRequest
+    PermissionAddSchemaResponse:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - name
+      - description
+      title: PermissionAddSchemaResponse
+    UserAddSchemaRequest:
+      properties:
+        username:
+          type: string
+          maxLength: 50
+          minLength: 3
+          title: Username
+          description: The username of the user
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          maxLength: 100
+          minLength: 6
+          title: Password
+          description: The password of the user
+      type: object
+      required:
+      - username
+      - email
+      - password
+      title: UserAddSchemaRequest
+    UserAddSchemaResponse:
+      properties:
+        username:
+          type: string
+          title: Username
+        email:
+          type: string
+          format: email
+          title: Email
+      type: object
+      required:
+      - username
+      - email
+      title: UserAddSchemaResponse
+    UserListSchemaResponse:
+      properties:
+        username:
+          type: string
+          title: Username
+        email:
+          type: string
+          title: Email
+      type: object
+      required:
+      - username
+      - email
+      title: UserListSchemaResponse
+    UserUpdateSchemaRequest:
+      properties:
+        username:
+          anyOf:
+          - type: string
+            maxLength: 50
+            minLength: 3
+          - type: 'null'
+          title: Username
+          description: The username of the user
+        email:
+          anyOf:
+          - type: string
+            format: email
+          - type: 'null'
+          title: Email
+      type: object
+      required:
+      - email
+      title: UserUpdateSchemaRequest
+    UserUpdateSchemaResponse:
+      properties:
+        username:
+          type: string
+          title: Username
+        email:
+          type: string
+          format: email
+          title: Email
+      type: object
+      required:
+      - username
+      - email
+      title: UserUpdateSchemaResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: token
