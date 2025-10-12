@@ -10,6 +10,10 @@ The service adopts the following best practices:
 - CI/CD: Configured with continuous integration and continuous delivery pipelines to automate development and deployment processes.
 - Linting and formatting: Uses Ruff to maintain code consistency and quality.
 
+### Documentation
+
+- [Swagger UI](https://marte2050.github.io/authentication-service/)
+
 ## Development Environment
 
 For the development environment, you don’t need Docker installed—only [Poetry](https://python-poetry.org/docs/) to manage the project dependencies. In development, the service uses SQLite as the database to simplify local setup and testing.
