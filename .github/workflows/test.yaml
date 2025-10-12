@@ -1,4 +1,4 @@
-name: Test project authetinication and authorization service
+name: Test project authentication and authorization service
 
 on:
   push:
@@ -7,22 +7,23 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
-  jobs:
-    publish:
-      runs-on: ubuntu-latest
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-      steps:
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-        
+
       - name: Install pipx
-        run: apt install -y pipx
+        run: sudo apt-get update && sudo apt-get install -y pipx
 
       - name: Install poetry
         run: pipx install poetry==2.2.1
