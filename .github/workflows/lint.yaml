@@ -1,5 +1,4 @@
-name: Test project authentication and authorization service
-
+name: Lint project authentication and authorization service
 on:
   push:
     branches:
@@ -10,8 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    needs: lint
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,5 +18,5 @@ jobs:
       - uses: ./.github/actions/setup-poetry
       
       - name: Run tests
-        run: poetry run task test
+        run: poetry run task lint
         working-directory: ./src
