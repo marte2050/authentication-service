@@ -31,8 +31,11 @@ jobs:
       - name: Add Poetry to PATH
         run: echo "${HOME}/.local/bin" >> $GITHUB_PATH
 
-      - name: Install dependencies
+      - name: Virtual env in project
         run: poetry config virtualenvs.in-project true
+        working-directory: ./src
+
+      - name: Install dependencies
         run: poetry install --no-root
         working-directory: ./src
 
@@ -41,5 +44,4 @@ jobs:
         working-directory: ./src
 
       - name: Set virtual environment
-        run: echo "${HOME}/app/.venv/bin" >> $GITHUB_PATH
-        working-directory: ./src
+        run: echo "${HOME}/src/.venv/bin" >> $GITHUB_PATH
