@@ -9,25 +9,32 @@ runs:
         python-version: '3.12'
 
     - name: Install pipx
+      shell: bash
       run: sudo apt-get update && sudo apt-get install -y pipx
 
     - name: Install poetry
+      shell: bash
       run: pipx install poetry==2.2.1
 
     - name: Add Poetry to PATH
+      shell: bash
       run: echo "${HOME}/.local/bin" >> $GITHUB_PATH
 
     - name: Virtual env in project
+      shell: bash
       run: poetry config virtualenvs.in-project true
       working-directory: ./src
 
     - name: Install dependencies
+      shell: bash
       run: poetry install --no-root
       working-directory: ./src
 
     - name: Set environment variables
+      shell: bash
       run: mv .env.sample.dev .env
       working-directory: ./src
 
     - name: Set virtual environment
+      shell: bash
       run: echo "${HOME}/src/.venv/bin" >> $GITHUB_PATH
