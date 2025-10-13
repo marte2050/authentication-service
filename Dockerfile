@@ -15,7 +15,6 @@ ENV PATH="/home/chameleon/.local/bin:$PATH"
 WORKDIR /app
 USER chameleon
 COPY --chown=chameleon:chameleon ./src ./
-RUN mv .env.sample.production .env
 RUN poetry config virtualenvs.in-project true
 RUN poetry install --no-interaction --no-ansi --without dev --no-root
 ENV VIRTUAL_ENV=/app/.venv
