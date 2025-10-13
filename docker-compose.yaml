@@ -4,9 +4,16 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: authentication_service
-    command: tail -f /dev/null
     ports:
       - "8000:8000"
+    environment:
+      - PRODUCTION_OR_STAGING=production
+      - DATABASE_URL=postgresql://user:password@db:5432/auth_db
+      - SECRET_KEY=your_secret_key
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+    depends_on:
+      - db
 
   db:
     image: postgres:15

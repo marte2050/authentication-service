@@ -4,20 +4,17 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
+from database import is_production_or_staging
+
 
 def create_session() -> Generator[Session, None, None]:
-    """Create a new SQLAlchemy session for testing purposes.
-
-    This function sets up an in-memory SQLite database, creates all tables
-    defined in the metadata, and provides a session for database operations.
-    After the session is used, it rolls back any changes and closes the session.
+    """Create a SQLAlchemy session connected to an a database.
 
     Yields:
-        Session: A SQLAlchemy session connected to the in-memory database.
+        Session: A SQLAlchemy session connected.
     """
     engine = create_engine(
-        "sqlite:///database.db",
-        connect_args={"check_same_thread": False},
+        is_production_or_staging(),
         poolclass=StaticPool,
     )
 

@@ -1,0 +1,8 @@
+site_name: Documentation to my authentication service
+
+theme:
+  name: "readthedocs"
+
+plugins:
+- search
+- mkdocstrings

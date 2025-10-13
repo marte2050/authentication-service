@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
@@ -8,9 +9,26 @@ from settings import Settings
 
 class Token:
     def __init__(self) -> None:
-        self.SECRET_KEY = Settings().SECRET_KEY
-        self.ALGORITHM = Settings().ALGORITHM_TOKEN
-        self.ACCESS_TOKEN_EXPIRE_MINUTES = Settings().ACCESS_TOKEN_EXPIRE_MINUTES
+        secret_key, algorithm, access_token_expire_minutes = self.is_production_or_staging().values()
+        self.SECRET_KEY = secret_key
+        self.ALGORITHM = algorithm
+        self.ACCESS_TOKEN_EXPIRE_MINUTES = access_token_expire_minutes
+
+    def is_production_or_staging(self) -> bool:
+        production_or_staging = os.getenv("PRODUCTION_OR_STAGING", "development")
+
+        if production_or_staging in ["production", "staging"]:
+            return {
+                "SECRET_KEY": os.getenv("SECRET_KEY"),
+                "ALGORITHM": os.getenv("ALGORITHM_TOKEN"),
+                "ACCESS_TOKEN_EXPIRE_MINUTES": int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")),
+            }
+
+        return {
+            "SECRET_KEY": Settings().SECRET_KEY,
+            "ALGORITHM": Settings().ALGORITHM_TOKEN,
+            "ACCESS_TOKEN_EXPIRE_MINUTES": Settings().ACCESS_TOKEN_EXPIRE_MINUTES,
+        }
 
     def create_access_token(self, data: dict) -> dict:
         to_encode = data.copy()
