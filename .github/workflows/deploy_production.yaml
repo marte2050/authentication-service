@@ -1,0 +1,24 @@
+name: Deploy Staging Workflow
+on:
+  workflow_run:
+    workflows: ["Publish Image to Production"]
+    types:
+      - completed
+
+jobs:
+  deploy_production:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only -c fly.production.toml
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PRODUCTION }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY_PRODUCTION }}
+          ALGORITHM_TOKEN: ${{ secrets.ALGORITHM_TOKEN_PRODUCTION }}
+          ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES_PRODUCTION }}
+
