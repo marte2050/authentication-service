@@ -63,4 +63,4 @@ The project is configured with GitHub Actions to automate the continuous integra
 - Generate documentation
 - Build the Docker image
 
-Continuous delivery can be configured to automatically deploy the service to a production or staging environment after tests are approved. For this, we can use Azure Web Apps, which allows direct deployment of Docker images.
+Continuous delivery can be configured to automatically deploy the service to a production or staging environment after tests are approved. For this, we can use fly.io, which allows direct deployment of Docker images.
