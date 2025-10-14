@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only --image marte2050/authentication_service:staging
+      - run: flyctl deploy --remote-only -c fly.staging.toml
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           FLY_APP_NAME: ${{ secrets.FLY_APP_NAME_STAGING }}

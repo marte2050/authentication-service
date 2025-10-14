@@ -1,0 +1,16 @@
+app = 'authentication-service-app'
+primary_region = 'gru'
+
+[build]
+  image = "docker.io/marte2050/authentication_service:staging"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'
