@@ -2,7 +2,7 @@ app = 'authentication-service-app-production'
 primary_region = 'gru'
 
 [build]
-  image = "docker.io/marte2050/authentication_service:production"
+  image = 'docker.io/marte2050/authentication_service:production'
 
 [http_service]
   internal_port = 8000
