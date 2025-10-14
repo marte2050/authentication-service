@@ -1,0 +1,28 @@
+name: Deploy Staging Workflow
+on:
+  push:
+    branches:
+      - staging
+  pull_request:
+    branches:
+      - staging
+  workflow_dispatch:
+
+jobs:
+  deploy_staging:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only --image marte2050/authentication_service:staging
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_APP_NAME: ${{ secrets.FLY_APP_NAME_STAGING }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL_STAGING }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY_STAGING }}
+          ALGORITHM_TOKEN: ${{ secrets.ALGORITHM_TOKEN_STAGING }}
+          ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES_STAGING }}
+
