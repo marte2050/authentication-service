@@ -1,4 +1,4 @@
-name: Deploy Staging Workflow
+name: Deploy Production Workflow
 on:
   workflow_run:
     workflows: ["Publish Image to Production"]
